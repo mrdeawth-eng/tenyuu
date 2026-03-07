@@ -3,15 +3,66 @@ import { useNavigate } from "react-router-dom";
 import { User, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { IconInput } from "@/components/ui/icon-input";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import { useAuth } from "@/contexts/AuthContext";
+import { useEffect } from "react";
 
 const Login = () => {
   const navigate = useNavigate();
-  const [username, setUsername] = useState("");
+  const { session } = useAuth();
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isRegister, setIsRegister] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleLogin = (e: React.FormEvent) => {
+  useEffect(() => {
+    if (session) {
+      navigate("/recipes", { replace: true });
+    }
+  }, [session, navigate]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    navigate("/recipes");
+    if (!email || !password) {
+      toast.error("Please fill in all fields");
+      return;
+    }
+    setLoading(true);
+
+    if (isRegister) {
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: { emailRedirectTo: window.location.origin },
+      });
+      if (error) {
+        toast.error(error.message);
+      } else {
+        toast.success("Check your email to confirm your account!");
+      }
+    } else {
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) {
+        toast.error(error.message);
+      }
+    }
+    setLoading(false);
+  };
+
+  const handleForgotPassword = async () => {
+    if (!email) {
+      toast.error("Please enter your email first");
+      return;
+    }
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/reset-password`,
+    });
+    if (error) {
+      toast.error(error.message);
+    } else {
+      toast.success("Password reset email sent!");
+    }
   };
 
   return (
@@ -26,12 +77,13 @@ const Login = () => {
         </p>
 
         {/* Form */}
-        <form onSubmit={handleLogin} className="space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-5">
           <IconInput
             icon={User}
-            placeholder="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            type="email"
+            placeholder="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
           <IconInput
             icon={Lock}
@@ -41,25 +93,34 @@ const Login = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
 
-          <button
-            type="button"
-            className="text-sm text-muted-foreground hover:text-foreground transition-colors underline"
-          >
-            Forget Password ?
-          </button>
+          {!isRegister && (
+            <button
+              type="button"
+              onClick={handleForgotPassword}
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors underline"
+            >
+              Forget Password ?
+            </button>
+          )}
 
           <div className="space-y-3 pt-2">
-            <Button type="submit" variant="warm" size="lg" className="w-full h-14 rounded-lg">
-              Login
+            <Button
+              type="submit"
+              variant="warm"
+              size="lg"
+              className="w-full h-14 rounded-lg"
+              disabled={loading}
+            >
+              {loading ? "..." : isRegister ? "Register" : "Login"}
             </Button>
             <Button
               type="button"
               variant="warm"
               size="lg"
               className="w-full h-14 rounded-lg"
-              onClick={() => navigate("/recipes")}
+              onClick={() => setIsRegister(!isRegister)}
             >
-              Register
+              {isRegister ? "Back to Login" : "Register"}
             </Button>
           </div>
         </form>
