@@ -3,6 +3,7 @@ import { Search, Heart, Clock, ChefHat, LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { IconInput } from "@/components/ui/icon-input";
 import RecipeCard from "@/components/RecipeCard";
+import { useAuth } from "@/contexts/AuthContext";
 
 import ramenImg from "@/assets/recipe-ramen.jpg";
 import pokeImg from "@/assets/recipe-poke.jpg";
@@ -26,6 +27,7 @@ const Recipes = () => {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
   const navigate = useNavigate();
+  const { signOut } = useAuth();
 
   const filtered = recipes.filter((r) => {
     const matchesSearch = r.title.toLowerCase().includes(search.toLowerCase());
@@ -40,7 +42,7 @@ const Recipes = () => {
         <div className="container max-w-4xl mx-auto flex items-center justify-between px-4 py-4">
           <h1 className="font-display text-2xl font-bold tracking-widest text-foreground">TENYUU</h1>
           <button
-            onClick={() => navigate("/")}
+            onClick={() => signOut()}
             className="text-muted-foreground hover:text-foreground transition-colors"
             aria-label="Log out"
           >
