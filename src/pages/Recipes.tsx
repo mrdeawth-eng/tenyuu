@@ -42,7 +42,7 @@ const Recipes = () => {
         <div className="container max-w-4xl mx-auto flex items-center justify-between px-4 py-4">
           <h1 className="font-display text-2xl font-bold tracking-widest text-foreground">TENYUU</h1>
           <button
-            onClick={() => navigate("/")}
+            onClick={() => signOut()}
             className="text-muted-foreground hover:text-foreground transition-colors"
             aria-label="Log out"
           >
