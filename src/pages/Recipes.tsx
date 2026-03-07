@@ -3,6 +3,7 @@ import { Search, Heart, Clock, ChefHat, LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { IconInput } from "@/components/ui/icon-input";
 import RecipeCard from "@/components/RecipeCard";
+import { useAuth } from "@/contexts/AuthContext";
 
 import ramenImg from "@/assets/recipe-ramen.jpg";
 import pokeImg from "@/assets/recipe-poke.jpg";
