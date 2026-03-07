@@ -27,6 +27,7 @@ const Recipes = () => {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
   const navigate = useNavigate();
+  const { signOut } = useAuth();
 
   const filtered = recipes.filter((r) => {
     const matchesSearch = r.title.toLowerCase().includes(search.toLowerCase());
