@@ -13,6 +13,14 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        display: ['Cormorant Garamond', 'serif'],
+        body: ['DM Sans', 'sans-serif'],
+      },
+      boxShadow: {
+        soft: 'var(--shadow-soft)',
+        card: 'var(--shadow-card)',
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
