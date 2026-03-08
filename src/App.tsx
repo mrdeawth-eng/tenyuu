@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import Login from "./pages/Login";
 import Recipes from "./pages/Recipes";
+import RecipeDetail from "./pages/RecipeDetail";
 import Fridge from "./pages/Fridge";
 import FridgeAdd from "./pages/FridgeAdd";
 import FridgeEdit from "./pages/FridgeEdit";
@@ -25,6 +26,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Login />} />
             <Route path="/recipes" element={<ProtectedRoute><Recipes /></ProtectedRoute>} />
+            <Route path="/recipe/:id" element={<ProtectedRoute><RecipeDetail /></ProtectedRoute>} />
             <Route path="/fridge" element={<ProtectedRoute><Fridge /></ProtectedRoute>} />
             <Route path="/fridge/add" element={<ProtectedRoute><FridgeAdd /></ProtectedRoute>} />
             <Route path="/fridge/edit/:id" element={<ProtectedRoute><FridgeEdit /></ProtectedRoute>} />

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Heart, Star, ChevronRight } from "lucide-react";
 
 interface RecipeItemProps {
@@ -6,13 +5,17 @@ interface RecipeItemProps {
   title: string;
   category: string;
   rating: number;
+  liked?: boolean;
+  onLikeToggle?: () => void;
+  onClick?: () => void;
 }
 
-const RecipeItem = ({ image, title, category, rating }: RecipeItemProps) => {
-  const [liked, setLiked] = useState(false);
-
+const RecipeItem = ({ image, title, category, rating, liked = false, onLikeToggle, onClick }: RecipeItemProps) => {
   return (
-    <div className="flex items-center gap-4 rounded-2xl bg-card p-3 shadow-soft">
+    <div
+      className="flex items-center gap-4 rounded-2xl bg-card p-3 shadow-soft cursor-pointer hover:bg-accent/30 transition-colors"
+      onClick={onClick}
+    >
       {/* Image */}
       <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-xl overflow-hidden flex-shrink-0">
         <img
@@ -28,7 +31,10 @@ const RecipeItem = ({ image, title, category, rating }: RecipeItemProps) => {
         <div className="flex items-start justify-between">
           <h3 className="font-display text-lg font-semibold text-foreground truncate pr-2">{title}</h3>
           <button
-            onClick={() => setLiked(!liked)}
+            onClick={(e) => {
+              e.stopPropagation();
+              onLikeToggle?.();
+            }}
             className="flex-shrink-0"
             aria-label={liked ? "Unlike" : "Like"}
           >
