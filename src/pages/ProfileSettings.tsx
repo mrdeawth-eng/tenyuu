@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { ChevronLeft, ChevronRight, Moon, Globe, User } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 
 const ProfileSettings = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { theme, setTheme } = useTheme();
   const [isDark, setIsDark] = useState(false);
   const [language, setLanguage] = useState("th");
@@ -20,13 +21,22 @@ const ProfileSettings = () => {
     setTheme(checked ? "dark" : "light");
   };
 
+  const handleBack = () => {
+    if (window.history.length > 1) {
+      navigate(-1);
+    } else {
+      navigate("/profile");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <header className="sticky top-0 z-10 bg-background/80 backdrop-blur-lg border-b border-border">
         <div className="flex items-center justify-between px-5 h-16">
           <button
-            onClick={() => navigate(-1)}
-            className="p-2 -ml-2 rounded-full hover:bg-accent transition-colors"
+            onClick={handleBack}
+            className="p-2 -ml-2 rounded-full hover:bg-accent active:bg-accent/80 transition-colors cursor-pointer"
+            aria-label="Go back"
           >
             <ChevronLeft className="w-6 h-6 text-foreground" />
           </button>
