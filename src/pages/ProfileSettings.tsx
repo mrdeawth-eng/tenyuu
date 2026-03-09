@@ -7,9 +7,18 @@ import { useEffect, useState } from "react";
 
 const ProfileSettings = () => {
   const navigate = useNavigate();
-  // Using a local state for demo purposes if next-themes is not fully set up
+  const { theme, setTheme } = useTheme();
   const [isDark, setIsDark] = useState(false);
   const [language, setLanguage] = useState("th");
+
+  useEffect(() => {
+    setIsDark(theme === "dark");
+  }, [theme]);
+
+  const handleDarkToggle = (checked: boolean) => {
+    setIsDark(checked);
+    setTheme(checked ? "dark" : "light");
+  };
 
   return (
     <div className="min-h-screen bg-background">
