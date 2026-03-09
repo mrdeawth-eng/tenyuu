@@ -22,6 +22,14 @@ const ProfileSettings = () => {
     setTheme(checked ? "dark" : "light");
   };
 
+  const handleBack = () => {
+    if (window.history.length > 1) {
+      navigate(-1);
+    } else {
+      navigate("/profile");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <header className="sticky top-0 z-10 bg-background/80 backdrop-blur-lg border-b border-border">
