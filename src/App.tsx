@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import Login from "./pages/Login";
 import Recipes from "./pages/Recipes";
+import SearchPage from "./pages/Search";
 import RecipeDetail from "./pages/RecipeDetail";
 import Fridge from "./pages/Fridge";
 import FridgeAdd from "./pages/FridgeAdd";
