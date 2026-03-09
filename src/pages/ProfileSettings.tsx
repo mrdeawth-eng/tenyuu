@@ -9,7 +9,6 @@ const ProfileSettings = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { theme, setTheme } = useTheme();
-  const { theme, setTheme } = useTheme();
   const [isDark, setIsDark] = useState(false);
   const [language, setLanguage] = useState("th");
 
