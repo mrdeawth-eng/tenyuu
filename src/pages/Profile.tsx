@@ -152,7 +152,7 @@ const Profile = () => {
             className="w-full flex items-center justify-between px-5 py-4 border-b border-border/50 hover:bg-accent/50 transition-colors"
           >
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-blue-500/10 text-blue-500">
+              <div className="p-2 rounded-lg bg-secondary text-secondary-foreground">
                 <Settings className="w-5 h-5" />
               </div>
               <span className="font-medium text-base">Setting</span>
@@ -165,7 +165,7 @@ const Profile = () => {
             className="w-full flex items-center justify-between px-5 py-4 border-b border-border/50 hover:bg-accent/50 transition-colors"
           >
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-amber-500/10 text-amber-500">
+              <div className="p-2 rounded-lg bg-accent text-accent-foreground">
                 <FileWarning className="w-5 h-5" />
               </div>
               <span className="font-medium text-base">Report</span>

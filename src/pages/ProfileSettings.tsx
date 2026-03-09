@@ -45,7 +45,7 @@ const ProfileSettings = () => {
           {/* Dark Mode Toggle */}
           <div className="w-full flex items-center justify-between px-5 py-4 border-b border-border/50">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-slate-500/10 text-slate-500">
+              <div className="p-2 rounded-lg bg-secondary text-secondary-foreground">
                 <Moon className="w-5 h-5" />
               </div>
               <span className="font-medium text-base">Dark mode</span>
@@ -59,7 +59,7 @@ const ProfileSettings = () => {
           {/* Language Selector */}
           <div className="w-full flex items-center justify-between px-5 py-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-500">
+              <div className="p-2 rounded-lg bg-accent text-accent-foreground">
                 <Globe className="w-5 h-5" />
               </div>
               <span className="font-medium text-base">Language</span>
