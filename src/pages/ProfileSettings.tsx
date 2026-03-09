@@ -35,8 +35,9 @@ const ProfileSettings = () => {
       <header className="sticky top-0 z-10 bg-background/80 backdrop-blur-lg border-b border-border">
         <div className="flex items-center justify-between px-5 h-16">
           <button
-            onClick={() => navigate(-1)}
-            className="p-2 -ml-2 rounded-full hover:bg-accent transition-colors"
+            onClick={handleBack}
+            className="p-2 -ml-2 rounded-full hover:bg-accent active:bg-accent/80 transition-colors cursor-pointer"
+            aria-label="Go back"
           >
             <ChevronLeft className="w-6 h-6 text-foreground" />
           </button>
