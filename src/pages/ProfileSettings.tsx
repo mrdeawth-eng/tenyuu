@@ -61,7 +61,7 @@ const ProfileSettings = () => {
             </div>
             <Switch
               checked={isDark}
-              onCheckedChange={setIsDark}
+              onCheckedChange={handleDarkToggle}
             />
           </div>
 
