@@ -417,7 +417,11 @@ const RecipeDetail = () => {
                     </div>
                   </div>
                   {rev.comment && (
-                    <p className="text-xs text-muted-foreground font-body leading-relaxed line-clamp-3">
+                    <p className="text-xs text-muted-foreground font-body leading-relaxed overflow-hidden" style={{
+                      display: '-webkit-box',
+                      WebkitLineClamp: 3,
+                      WebkitBoxOrient: 'vertical'
+                    }}>
                       {rev.comment}
                     </p>
                   )}
