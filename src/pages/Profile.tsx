@@ -1,41 +1,54 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Heart, Star, LogOut } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { History, Heart, Settings, FileWarning, LogOut, ChevronRight, Star } from "lucide-react";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import BottomNav from "@/components/BottomNav";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 
-interface Recipe {
+interface HistoryItem {
   id: string;
-  name: string;
-  category: string;
-  image_url: string | null;
-  rating: number;
+  recipe_id: string;
+  recipes: {
+    id: string;
+    name: string;
+    image_url: string | null;
+    rating: number;
+  };
 }
 
 const Profile = () => {
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
-  const [favorites, setFavorites] = useState<Recipe[]>([]);
+  const [history, setHistory] = useState<HistoryItem[]>([]);
 
   useEffect(() => {
     if (!user) return;
-    const fetchFavorites = async () => {
-      const { data } = await supabase
-        .from("user_favorites")
-        .select("recipe_id")
-        .eq("user_id", user.id);
-      if (data && data.length > 0) {
-        const ids = data.map((d: any) => d.recipe_id);
-        const { data: recipes } = await supabase
-          .from("recipes")
-          .select("*")
-          .in("id", ids);
-        setFavorites(recipes || []);
+    const fetchHistory = async () => {
+      const { data, error } = await supabase
+        .from("search_history")
+        .select(`
+          id,
+          recipe_id,
+          recipes (
+            id,
+            name,
+            image_url,
+            rating
+          )
+        `)
+        .eq("user_id", user.id)
+        .order("searched_at", { ascending: false });
+
+      if (!error && data) {
+        // Remove duplicates based on recipe_id
+        const uniqueHistory = Array.from(
+          new Map(data.map((item) => [item.recipe_id, item])).values()
+        );
+        setHistory(uniqueHistory as unknown as HistoryItem[]);
       }
     };
-    fetchFavorites();
+    fetchHistory();
   }, [user]);
 
   return (
@@ -45,73 +58,135 @@ const Profile = () => {
           TENYUU
         </h1>
       </header>
-      <main className="container max-w-lg mx-auto px-5 mt-8 space-y-6">
+      
+      <main className="container max-w-lg mx-auto px-5 mt-4 space-y-6">
         {/* User info */}
-        <div className="rounded-2xl bg-card p-6 shadow-soft text-center space-y-3">
-          <div className="h-20 w-20 rounded-full bg-muted mx-auto flex items-center justify-center">
-            <span className="font-display text-2xl font-bold text-muted-foreground">
+        <div className="flex flex-col items-center justify-center space-y-3 pt-4 pb-6">
+          <div className="h-24 w-24 rounded-full bg-primary/20 flex items-center justify-center border-4 border-background shadow-sm">
+            <span className="font-display text-4xl font-bold text-primary">
               {user?.email?.charAt(0).toUpperCase()}
             </span>
           </div>
-          <p className="text-foreground font-medium">{user?.email}</p>
+          <div className="text-center">
+            <h2 className="text-xl font-display font-semibold text-foreground">
+              {user?.email?.split('@')[0]}
+            </h2>
+            <p className="text-sm text-muted-foreground">{user?.email}</p>
+          </div>
         </div>
 
-        {/* Favorites */}
-        {favorites.length > 0 && (
-          <section>
-            <h2 className="font-body text-base font-semibold text-foreground mb-3 flex items-center gap-2">
-              <Heart className="h-5 w-5 fill-destructive text-destructive" />
-              รายการโปรด
-            </h2>
-            <div className="space-y-3">
-              {favorites.map((recipe) => (
-                <div
-                  key={recipe.id}
-                  onClick={() => navigate(`/recipe/${recipe.id}`)}
-                  className="flex items-center gap-4 rounded-2xl bg-card p-3 shadow-soft cursor-pointer hover:bg-accent/30 transition-colors"
-                >
-                  <div className="w-20 h-20 rounded-xl overflow-hidden flex-shrink-0">
-                    <img
-                      src={recipe.image_url || ""}
-                      alt={recipe.name}
-                      className="w-full h-full object-cover"
-                      loading="lazy"
-                    />
+        {/* Menu Actions */}
+        <div className="rounded-2xl bg-card shadow-soft overflow-hidden">
+          <Accordion type="single" collapsible className="w-full">
+            <AccordionItem value="history" className="border-b border-border/50">
+              <AccordionTrigger className="px-5 py-4 hover:no-underline hover:bg-accent/50 transition-colors">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-lg bg-primary/10 text-primary">
+                    <History className="w-5 h-5" />
                   </div>
-                  <div className="flex-1 min-w-0 space-y-1">
-                    <h3 className="font-display text-base font-semibold text-foreground truncate">
-                      {recipe.name}
-                    </h3>
-                    <span className="inline-block text-xs font-medium px-2 py-0.5 rounded-full bg-muted text-muted-foreground">
-                      {recipe.category}
-                    </span>
-                    <div className="flex items-center gap-1">
-                      {[1, 2, 3, 4, 5].map((star) => (
-                        <Star
-                          key={star}
-                          className={`h-3.5 w-3.5 ${
-                            star <= Number(recipe.rating) ? "fill-amber-400 text-amber-400" : "text-muted"
-                          }`}
-                        />
-                      ))}
-                    </div>
-                  </div>
+                  <span className="font-medium text-base">History</span>
                 </div>
-              ))}
-            </div>
-          </section>
-        )}
+              </AccordionTrigger>
+              <AccordionContent className="px-5 pb-4 pt-2">
+                {history.length > 0 ? (
+                  <div className="space-y-3">
+                    {history.map((item) => (
+                      <div
+                        key={item.id}
+                        onClick={() => navigate(`/recipe/${item.recipes.id}`)}
+                        className="flex items-center gap-3 p-2 -mx-2 rounded-xl hover:bg-accent/50 cursor-pointer transition-colors"
+                      >
+                        <div className="w-14 h-14 rounded-lg overflow-hidden flex-shrink-0 bg-muted">
+                          <img
+                            src={item.recipes.image_url || ""}
+                            alt={item.recipes.name}
+                            className="w-full h-full object-cover"
+                            loading="lazy"
+                          />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h4 className="font-medium text-foreground truncate">
+                            {item.recipes.name}
+                          </h4>
+                          <div className="flex items-center gap-1 mt-1">
+                            {[1, 2, 3, 4, 5].map((star) => (
+                              <Star
+                                key={star}
+                                className={`h-3 w-3 ${
+                                  star <= Number(item.recipes.rating)
+                                    ? "fill-amber-400 text-amber-400"
+                                    : "text-muted"
+                                }`}
+                              />
+                            ))}
+                          </div>
+                        </div>
+                        <ChevronRight className="w-5 h-5 text-muted-foreground" />
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-center text-muted-foreground py-4">
+                    คุณยังไม่ได้ประวัติการทำอาหาร
+                  </p>
+                )}
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
 
-        <Button
-          variant="warm"
-          size="lg"
-          className="w-full h-14 rounded-xl gap-2"
-          onClick={() => signOut()}
-        >
-          <LogOut className="h-5 w-5" />
-          Logout
-        </Button>
+          <button
+            onClick={() => navigate("/profile/favorite")}
+            className="w-full flex items-center justify-between px-5 py-4 border-b border-border/50 hover:bg-accent/50 transition-colors"
+          >
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-destructive/10 text-destructive">
+                <Heart className="w-5 h-5" />
+              </div>
+              <span className="font-medium text-base">Favorite</span>
+            </div>
+            <ChevronRight className="w-5 h-5 text-muted-foreground" />
+          </button>
+
+          <button
+            onClick={() => navigate("/profile/settings")}
+            className="w-full flex items-center justify-between px-5 py-4 border-b border-border/50 hover:bg-accent/50 transition-colors"
+          >
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-secondary text-secondary-foreground">
+                <Settings className="w-5 h-5" />
+              </div>
+              <span className="font-medium text-base">Setting</span>
+            </div>
+            <ChevronRight className="w-5 h-5 text-muted-foreground" />
+          </button>
+
+          <button
+            onClick={() => alert("Report action")}
+            className="w-full flex items-center justify-between px-5 py-4 border-b border-border/50 hover:bg-accent/50 transition-colors"
+          >
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-accent text-accent-foreground">
+                <FileWarning className="w-5 h-5" />
+              </div>
+              <span className="font-medium text-base">Report</span>
+            </div>
+            <ChevronRight className="w-5 h-5 text-muted-foreground" />
+          </button>
+
+          <button
+            onClick={() => signOut()}
+            className="w-full flex items-center justify-between px-5 py-4 hover:bg-accent/50 transition-colors text-destructive"
+          >
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-destructive/10">
+                <LogOut className="w-5 h-5" />
+              </div>
+              <span className="font-medium text-base">Log out</span>
+            </div>
+          </button>
+        </div>
       </main>
+      
       <BottomNav />
     </div>
   );

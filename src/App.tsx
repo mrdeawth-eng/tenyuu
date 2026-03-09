@@ -14,6 +14,9 @@ import FridgeEdit from "./pages/FridgeEdit";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/ProtectedRoute";
+import ProfileFavorite from "./pages/ProfileFavorite";
+import ProfileSettings from "./pages/ProfileSettings";
+import ProfileAccount from "./pages/ProfileAccount";
 
 const queryClient = new QueryClient();
 
@@ -33,6 +36,9 @@ const App = () => (
             <Route path="/fridge/add" element={<ProtectedRoute><FridgeAdd /></ProtectedRoute>} />
             <Route path="/fridge/edit/:id" element={<ProtectedRoute><FridgeEdit /></ProtectedRoute>} />
             <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+            <Route path="/profile/favorite" element={<ProtectedRoute><ProfileFavorite /></ProtectedRoute>} />
+            <Route path="/profile/settings" element={<ProtectedRoute><ProfileSettings /></ProtectedRoute>} />
+            <Route path="/profile/account" element={<ProtectedRoute><ProfileAccount /></ProtectedRoute>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
