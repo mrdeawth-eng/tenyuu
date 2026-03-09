@@ -50,6 +50,41 @@ export type Database = {
         }
         Relationships: []
       }
+      recipe_reviews: {
+        Row: {
+          comment: string | null
+          created_at: string
+          id: string
+          rating: number
+          recipe_id: string
+          user_id: string
+        }
+        Insert: {
+          comment?: string | null
+          created_at?: string
+          id?: string
+          rating: number
+          recipe_id: string
+          user_id: string
+        }
+        Update: {
+          comment?: string | null
+          created_at?: string
+          id?: string
+          rating?: number
+          recipe_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recipe_reviews_recipe_id_fkey"
+            columns: ["recipe_id"]
+            isOneToOne: false
+            referencedRelation: "recipes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       recipes: {
         Row: {
           category: string
@@ -61,6 +96,7 @@ export type Database = {
           instructions: string | null
           name: string
           rating: number
+          video_url: string | null
         }
         Insert: {
           category?: string
@@ -72,6 +108,7 @@ export type Database = {
           instructions?: string | null
           name: string
           rating?: number
+          video_url?: string | null
         }
         Update: {
           category?: string
@@ -83,6 +120,7 @@ export type Database = {
           instructions?: string | null
           name?: string
           rating?: number
+          video_url?: string | null
         }
         Relationships: []
       }
