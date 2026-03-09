@@ -226,7 +226,7 @@ const RecipeDetail = () => {
           <p className="text-muted-foreground font-body text-sm">ขอบคุณสำหรับรีวิวของคุณ</p>
         </div>
         <Button
-          className="w-full h-14 rounded-xl text-base font-semibold bg-green-500 hover:bg-green-600 text-white border-0"
+          className="w-full h-14 rounded-xl text-base font-semibold bg-foreground text-background hover:bg-foreground/90 border-0"
           onClick={() => navigate("/recipes")}
         >
           เสร็จสิ้น
