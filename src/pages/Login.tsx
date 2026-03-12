@@ -96,7 +96,7 @@ const Login = () => {
           {!isRegister && (
             <button
               type="button"
-              onClick={handleForgotPassword}
+              onClick={() => navigate("/forgot-password")}
               className="text-sm text-muted-foreground hover:text-foreground transition-colors underline"
             >
               Forget Password ?
