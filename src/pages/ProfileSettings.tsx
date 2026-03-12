@@ -1,16 +1,16 @@
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ChevronLeft, ChevronRight, Moon, Globe, User } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const ProfileSettings = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const { theme, setTheme } = useTheme();
+  const { lang, setLang, t } = useLanguage();
   const [isDark, setIsDark] = useState(false);
-  const [language, setLanguage] = useState("th");
 
   useEffect(() => {
     setIsDark(theme === "dark");
@@ -40,7 +40,7 @@ const ProfileSettings = () => {
           >
             <ChevronLeft className="w-6 h-6 text-foreground" />
           </button>
-          <h1 className="font-display text-lg font-semibold">Setting</h1>
+          <h1 className="font-display text-lg font-semibold">{t.setting}</h1>
           <div className="w-10"></div>
         </div>
       </header>
@@ -56,7 +56,7 @@ const ProfileSettings = () => {
               <div className="p-2 rounded-lg bg-primary/10 text-primary">
                 <User className="w-5 h-5" />
               </div>
-              <span className="font-medium text-base">Account</span>
+              <span className="font-medium text-base">{t.account}</span>
             </div>
             <ChevronRight className="w-5 h-5 text-muted-foreground" />
           </button>
@@ -67,12 +67,9 @@ const ProfileSettings = () => {
               <div className="p-2 rounded-lg bg-secondary text-secondary-foreground">
                 <Moon className="w-5 h-5" />
               </div>
-              <span className="font-medium text-base">Dark mode</span>
+              <span className="font-medium text-base">{t.darkMode}</span>
             </div>
-            <Switch
-              checked={isDark}
-              onCheckedChange={handleDarkToggle}
-            />
+            <Switch checked={isDark} onCheckedChange={handleDarkToggle} />
           </div>
 
           {/* Language Selector */}
@@ -81,11 +78,11 @@ const ProfileSettings = () => {
               <div className="p-2 rounded-lg bg-accent text-accent-foreground">
                 <Globe className="w-5 h-5" />
               </div>
-              <span className="font-medium text-base">Language</span>
+              <span className="font-medium text-base">{t.language}</span>
             </div>
-            <Select value={language} onValueChange={setLanguage}>
+            <Select value={lang} onValueChange={(v) => setLang(v as "th" | "en")}>
               <SelectTrigger className="w-[120px] h-9 bg-transparent border-none focus:ring-0 text-right pr-2">
-                <SelectValue placeholder="Select language" />
+                <SelectValue />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="th">ภาษาไทย</SelectItem>

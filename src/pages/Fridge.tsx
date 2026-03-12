@@ -6,6 +6,7 @@ import BottomNav from "@/components/BottomNav";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface Ingredient {
   id: string;
@@ -19,6 +20,7 @@ interface Ingredient {
 const Fridge = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { t } = useLanguage();
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [loading, setLoading] = useState(true);
   const [selecting, setSelecting] = useState(false);
@@ -76,17 +78,15 @@ const Fridge = () => {
     <div className="min-h-screen bg-background pb-24">
       {/* Header */}
       <header className="pt-6 pb-4 px-5">
-        <h1 className="text-2xl font-bold text-foreground">รายการในตู้เย็น</h1>
+        <h1 className="text-2xl font-bold text-foreground">{t.fridgeTitle}</h1>
       </header>
 
       {/* Ingredient List */}
       <main className="container max-w-lg mx-auto px-5 space-y-3">
         {loading ? (
-          <p className="text-center text-muted-foreground py-10">กำลังโหลด...</p>
+          <p className="text-center text-muted-foreground py-10">{t.loading}</p>
         ) : ingredients.length === 0 ? (
-          <p className="text-center text-muted-foreground py-10">
-            ยังไม่มีวัตถุดิบในตู้เย็น
-          </p>
+          <p className="text-center text-muted-foreground py-10">{t.noIngredients}</p>
         ) : (
           ingredients.map((item) => (
             <div
@@ -142,7 +142,7 @@ const Fridge = () => {
                 disabled={selected.size === 0}
               >
                 <Trash2 className="h-5 w-5 mr-2" />
-                ลบวัตถุดิบที่เลือก ({selected.size})
+                {t.deleteSelected} ({selected.size})
               </Button>
               <Button
                 variant="outline"
@@ -153,7 +153,7 @@ const Fridge = () => {
                   setSelected(new Set());
                 }}
               >
-                ยกเลิก
+                {t.cancel}
               </Button>
             </>
           ) : (
@@ -165,7 +165,7 @@ const Fridge = () => {
                 onClick={() => setSelecting(true)}
                 disabled={ingredients.length === 0}
               >
-                เลือกวัตถุดิบ
+                {t.selectIngredients}
               </Button>
               <Button
                 variant="warm"
@@ -174,7 +174,7 @@ const Fridge = () => {
                 onClick={() => navigate("/fridge/add")}
               >
                 <Plus className="h-5 w-5 mr-2" />
-                เพิ่มวัตถุดิบ
+                {t.addIngredient}
               </Button>
             </>
           )}
