@@ -1,15 +1,17 @@
 import { Home, Container, User } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
-
-const tabs = [
-  { icon: Home, label: "Home", path: "/recipes" },
-  { icon: Container, label: "Fridge", path: "/fridge" },
-  { icon: User, label: "Profile", path: "/profile" },
-];
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const BottomNav = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { t } = useLanguage();
+
+  const tabs = [
+    { icon: Home, label: t.home, path: "/recipes" },
+    { icon: Container, label: t.fridge, path: "/fridge" },
+    { icon: User, label: t.profile, path: "/profile" },
+  ];
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-20 bg-background border-t border-border">
@@ -18,7 +20,7 @@ const BottomNav = () => {
           const isActive = location.pathname === tab.path;
           return (
             <button
-              key={tab.label}
+              key={tab.path}
               onClick={() => navigate(tab.path)}
               className={`flex flex-col items-center gap-0.5 px-4 py-1 rounded-xl transition-colors ${
                 isActive ? "text-foreground" : "text-muted-foreground"

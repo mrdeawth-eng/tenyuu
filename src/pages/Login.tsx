@@ -7,127 +7,63 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useAuth } from "@/contexts/AuthContext";
 import { useEffect } from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const Login = () => {
   const navigate = useNavigate();
   const { session } = useAuth();
+  const { t } = useLanguage();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isRegister, setIsRegister] = useState(false);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (session) {
-      navigate("/recipes", { replace: true });
-    }
+    if (session) navigate("/recipes", { replace: true });
   }, [session, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email || !password) {
-      toast.error("Please fill in all fields");
-      return;
-    }
+    if (!email || !password) { toast.error("Please fill in all fields"); return; }
     setLoading(true);
-
     if (isRegister) {
-      const { error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: { emailRedirectTo: window.location.origin },
-      });
-      if (error) {
-        toast.error(error.message);
-      } else {
-        toast.success("Check your email to confirm your account!");
-      }
+      const { error } = await supabase.auth.signUp({ email, password, options: { emailRedirectTo: window.location.origin } });
+      if (error) toast.error(error.message); else toast.success("Check your email to confirm your account!");
     } else {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
-      if (error) {
-        toast.error(error.message);
-      }
+      if (error) toast.error(error.message);
     }
     setLoading(false);
-  };
-
-  const handleForgotPassword = async () => {
-    if (!email) {
-      toast.error("Please enter your email first");
-      return;
-    }
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/reset-password`,
-    });
-    if (error) {
-      toast.error(error.message);
-    } else {
-      toast.success("Password reset email sent!");
-    }
   };
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-6">
       <div className="w-full max-w-sm space-y-10">
-        {/* Brand */}
-        <h1 className="text-center font-display text-5xl font-bold tracking-widest text-foreground">
-          TENYUU
-        </h1>
-        <p className="text-center text-sm text-muted-foreground -mt-6">
-          Discover & share recipes
-        </p>
+        <h1 className="text-center font-display text-5xl font-bold tracking-widest text-foreground">TENYUU</h1>
+        <p className="text-center text-sm text-muted-foreground -mt-6">{t.discoverRecipes}</p>
 
-        {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-5">
-          <IconInput
-            icon={User}
-            type="email"
-            placeholder="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <IconInput
-            icon={Lock}
-            type="password"
-            placeholder="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+          <IconInput icon={User} type="email" placeholder={t.email} value={email} onChange={(e) => setEmail(e.target.value)} />
+          <IconInput icon={Lock} type="password" placeholder={t.password} value={password} onChange={(e) => setPassword(e.target.value)} />
 
           {!isRegister && (
-            <button
-              type="button"
-              onClick={() => navigate("/forgot-password")}
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors underline"
-            >
-              Forget Password ?
+            <button type="button" onClick={() => navigate("/forgot-password")} className="text-sm text-muted-foreground hover:text-foreground transition-colors underline">
+              {t.forgetPassword}
             </button>
           )}
 
           <div className="space-y-3 pt-2">
-            <Button
-              type="submit"
-              variant="warm"
-              size="lg"
-              className="w-full h-14 rounded-lg"
-              disabled={loading}
-            >
-              {loading ? "..." : isRegister ? "Register" : "Login"}
+            <Button type="submit" variant="warm" size="lg" className="w-full h-14 rounded-lg" disabled={loading}>
+              {loading ? "..." : isRegister ? t.registerBtn : t.loginBtn}
             </Button>
-            <Button
-              type="button"
-              variant="warm"
-              size="lg"
-              className="w-full h-14 rounded-lg"
-              onClick={() => setIsRegister(!isRegister)}
-            >
-              {isRegister ? "Back to Login" : "Register"}
+            <Button type="button" variant="warm" size="lg" className="w-full h-14 rounded-lg" onClick={() => setIsRegister(!isRegister)}>
+              {isRegister ? t.backToLogin : t.registerBtn}
             </Button>
           </div>
         </form>
 
-        {/* Social */}
         <div className="text-center space-y-4">
-          <span className="text-sm text-muted-foreground">-or-</span>
+          <span className="text-sm text-muted-foreground">{t.or}</span>
           <div className="flex justify-center gap-6">
             <button className="text-foreground hover:text-muted-foreground transition-colors" aria-label="Sign in with Google">
               <svg className="h-8 w-8" viewBox="0 0 24 24" fill="currentColor">
