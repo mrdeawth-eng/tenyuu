@@ -14,8 +14,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ['Cormorant Garamond', 'serif'],
-        body: ['DM Sans', 'sans-serif'],
+        display: ['Prompt', 'Cormorant Garamond', 'sans-serif'],
+        body: ['Prompt', 'DM Sans', 'sans-serif'],
       },
       boxShadow: {
         soft: 'var(--shadow-soft)',

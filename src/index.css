@@ -49,8 +49,8 @@
     --sidebar-ring: 25 30% 70%;
 
     /* Custom tokens */
-    --font-display: 'Cormorant Garamond', serif;
-    --font-body: 'DM Sans', sans-serif;
+    --font-display: 'Prompt', 'Cormorant Garamond', sans-serif;
+    --font-body: 'Prompt', 'DM Sans', sans-serif;
     --shadow-soft: 0 2px 12px -2px hsl(25 20% 50% / 0.12);
     --shadow-card: 0 4px 20px -4px hsl(25 20% 50% / 0.15);
   }
