@@ -161,7 +161,7 @@ const Fridge = () => {
               <Button
                 variant="warm"
                 size="lg"
-                className="w-full h-14 rounded-xl border-2 border-foreground/10"
+                className="w-full h-14 rounded-xl"
                 onClick={() => setSelecting(true)}
                 disabled={ingredients.length === 0}
               >
