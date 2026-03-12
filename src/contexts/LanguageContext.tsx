@@ -201,7 +201,7 @@ const translations = {
   },
 } as const;
 
-type Translations = typeof translations.th;
+type Translations = Record<keyof typeof translations.th, string>;
 
 interface LanguageContextType {
   lang: Lang;
