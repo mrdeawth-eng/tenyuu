@@ -107,6 +107,12 @@ const translations = {
     milliliter: "มิลลิลิตร (ml)",
     liter: "ลิตร (L)",
     milligram: "มิลลิกรัม (mg)",
+    confirmSelection: "ยืนยัน",
+    confirmLogoutTitle: "ยืนยันการออกจากระบบ",
+    confirmLogoutMessage: "คุณแน่ใจหรือไม่ว่าต้องการออกจากระบบ?",
+    confirm: "ยืนยัน",
+    matchingRecipes: "เมนูที่ตรงกับวัตถุดิบ",
+    noMatchingRecipes: "ไม่พบเมนูที่ตรงกับวัตถุดิบที่เลือก",
   },
   en: {
     home: "Home",
