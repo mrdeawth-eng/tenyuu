@@ -7,7 +7,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import Login from "./pages/Login";
 import ForgotPassword from "./pages/ForgotPassword";
-import VerifyOTP from "./pages/VerifyOTP";
+import ResetPassword from "./pages/ResetPassword";
 import ResetPassword from "./pages/ResetPassword";
 import Recipes from "./pages/Recipes";
 import SearchPage from "./pages/Search";
