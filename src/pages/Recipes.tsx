@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { Search } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import BottomNav from "@/components/BottomNav";
 import ExpiringAlert from "@/components/ExpiringAlert";
 import RecipeItem from "@/components/RecipeItem";
