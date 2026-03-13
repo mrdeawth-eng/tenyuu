@@ -141,6 +141,19 @@ const Profile = () => {
             </div>
           </button>
         </div>
+
+        <AlertDialog open={showLogoutDialog} onOpenChange={setShowLogoutDialog}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>{t.confirmLogoutTitle}</AlertDialogTitle>
+              <AlertDialogDescription>{t.confirmLogoutMessage}</AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>{t.cancel}</AlertDialogCancel>
+              <AlertDialogAction onClick={() => signOut()}>{t.confirm}</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </main>
       
       <BottomNav />

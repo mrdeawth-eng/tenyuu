@@ -204,6 +204,12 @@ const translations = {
     milliliter: "Milliliter (ml)",
     liter: "Liter (L)",
     milligram: "Milligram (mg)",
+    confirmSelection: "Confirm",
+    confirmLogoutTitle: "Confirm Logout",
+    confirmLogoutMessage: "Are you sure you want to log out?",
+    confirm: "Confirm",
+    matchingRecipes: "Recipes matching your ingredients",
+    noMatchingRecipes: "No recipes match the selected ingredients",
   },
 } as const;
 
