@@ -27,8 +27,16 @@ const Fridge = () => {
   const [selected, setSelected] = useState<Set<string>>(new Set());
 
   const fetchIngredients = async () => {
-    // Disabled Supabase loading – show empty state
-    setIngredients([]);
+    if (!user) return;
+    const { data, error } = await supabase
+      .from("fridge_ingredients")
+      .select("*")
+      .order("created_at", { ascending: false });
+    if (error) {
+      toast.error("Failed to load ingredients");
+    } else {
+      setIngredients(data || []);
+    }
     setLoading(false);
   };
 

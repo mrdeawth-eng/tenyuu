@@ -150,7 +150,7 @@ const Profile = () => {
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>{t.cancel}</AlertDialogCancel>
-              <AlertDialogAction onClick={async () => { await signOut(); navigate("/"); }}>{t.confirm}</AlertDialogAction>
+              <AlertDialogAction onClick={() => signOut()}>{t.confirm}</AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
