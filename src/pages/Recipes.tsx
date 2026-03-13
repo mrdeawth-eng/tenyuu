@@ -90,12 +90,31 @@ const Recipes = () => {
     }
   }, [user]);
 
+  const fetchMatchedRecipes = useCallback(async () => {
+    if (selectedIngredients.length === 0) { setMatchedRecipes([]); return; }
+    const { data } = await supabase.from("recipes").select("*");
+    if (data) {
+      const matched = data.filter((recipe) => {
+        const recipeIngredients = recipe.ingredients as any[];
+        if (!recipeIngredients || !Array.isArray(recipeIngredients)) return false;
+        return selectedIngredients.some((sel) =>
+          recipeIngredients.some((ri: any) => {
+            const name = typeof ri === "string" ? ri : ri.name || "";
+            return name.toLowerCase().includes(sel.toLowerCase());
+          })
+        );
+      });
+      setMatchedRecipes(matched);
+    }
+  }, [selectedIngredients]);
+
   useEffect(() => {
     fetchExpiring();
     fetchRecommended();
     fetchHistory();
     fetchFavorites();
-  }, [fetchExpiring, fetchRecommended, fetchHistory, fetchFavorites]);
+    fetchMatchedRecipes();
+  }, [fetchExpiring, fetchRecommended, fetchHistory, fetchFavorites, fetchMatchedRecipes]);
 
   const handleRecipeClick = async (recipe: Recipe) => {
     if (user) {
