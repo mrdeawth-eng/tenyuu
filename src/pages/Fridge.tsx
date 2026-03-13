@@ -135,6 +135,21 @@ const Fridge = () => {
           {selecting ? (
             <>
               <Button
+                variant="warm"
+                size="lg"
+                className="w-full h-14 rounded-xl"
+                onClick={() => {
+                  const selectedNames = ingredients
+                    .filter((i) => selected.has(i.id))
+                    .map((i) => i.name);
+                  navigate("/recipes", { state: { selectedIngredients: selectedNames } });
+                }}
+                disabled={selected.size === 0}
+              >
+                <Check className="h-5 w-5 mr-2" />
+                {t.confirmSelection}
+              </Button>
+              <Button
                 variant="destructive"
                 size="lg"
                 className="w-full h-14 rounded-xl"

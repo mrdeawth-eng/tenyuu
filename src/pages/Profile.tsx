@@ -24,6 +24,7 @@ const Profile = () => {
   const { user, signOut } = useAuth();
   const { t } = useLanguage();
   const [history, setHistory] = useState<HistoryItem[]>([]);
+  const [showLogoutDialog, setShowLogoutDialog] = useState(false);
 
   useEffect(() => {
     if (!user) return;
