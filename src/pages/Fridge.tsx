@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { Plus, ChevronRight, Trash2 } from "lucide-react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { Plus, ChevronRight, Trash2, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import BottomNav from "@/components/BottomNav";
 import { supabase } from "@/integrations/supabase/client";
