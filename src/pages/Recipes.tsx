@@ -151,6 +151,21 @@ const Recipes = () => {
           </div>
         </div>
 
+        {selectedIngredients.length > 0 && (
+          <section>
+            <h2 className="font-body text-base font-semibold text-foreground mb-3">{t.matchingRecipes}</h2>
+            {matchedRecipes.length > 0 ? (
+              <div className="space-y-3">
+                {matchedRecipes.map((recipe) => (
+                  <RecipeItem key={recipe.id} image={recipe.image_url || ""} title={recipe.name} category={recipe.category} rating={Number(recipe.rating)} liked={favoriteIds.has(recipe.id)} onLikeToggle={() => toggleFavorite(recipe.id)} onClick={() => handleRecipeClick(recipe)} />
+                ))}
+              </div>
+            ) : (
+              <p className="text-sm text-muted-foreground font-body">{t.noMatchingRecipes}</p>
+            )}
+          </section>
+        )}
+
         <section>
           <h2 className="font-body text-base font-semibold text-foreground mb-3">{t.expiringTitle}</h2>
           {expiringItems.length > 0 ? (
