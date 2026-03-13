@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { History, Heart, Settings, FileWarning, LogOut, ChevronRight, Star } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import BottomNav from "@/components/BottomNav";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -23,6 +24,7 @@ const Profile = () => {
   const { user, signOut } = useAuth();
   const { t } = useLanguage();
   const [history, setHistory] = useState<HistoryItem[]>([]);
+  const [showLogoutDialog, setShowLogoutDialog] = useState(false);
 
   useEffect(() => {
     if (!user) return;
@@ -132,13 +134,26 @@ const Profile = () => {
             <ChevronRight className="w-5 h-5 text-muted-foreground" />
           </button>
 
-          <button onClick={() => signOut()} className="w-full flex items-center justify-between px-5 py-4 hover:bg-accent/50 transition-colors text-destructive">
+          <button onClick={() => setShowLogoutDialog(true)} className="w-full flex items-center justify-between px-5 py-4 hover:bg-accent/50 transition-colors text-destructive">
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-lg bg-destructive/10"><LogOut className="w-5 h-5" /></div>
               <span className="font-medium text-base">{t.logout}</span>
             </div>
           </button>
         </div>
+
+        <AlertDialog open={showLogoutDialog} onOpenChange={setShowLogoutDialog}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>{t.confirmLogoutTitle}</AlertDialogTitle>
+              <AlertDialogDescription>{t.confirmLogoutMessage}</AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>{t.cancel}</AlertDialogCancel>
+              <AlertDialogAction onClick={() => signOut()}>{t.confirm}</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </main>
       
       <BottomNav />

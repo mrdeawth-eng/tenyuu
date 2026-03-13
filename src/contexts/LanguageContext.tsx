@@ -107,6 +107,12 @@ const translations = {
     milliliter: "มิลลิลิตร (ml)",
     liter: "ลิตร (L)",
     milligram: "มิลลิกรัม (mg)",
+    confirmSelection: "ยืนยัน",
+    confirmLogoutTitle: "ยืนยันการออกจากระบบ",
+    confirmLogoutMessage: "คุณแน่ใจหรือไม่ว่าต้องการออกจากระบบ?",
+    confirm: "ยืนยัน",
+    matchingRecipes: "เมนูที่ตรงกับวัตถุดิบ",
+    noMatchingRecipes: "ไม่พบเมนูที่ตรงกับวัตถุดิบที่เลือก",
   },
   en: {
     home: "Home",
@@ -198,6 +204,12 @@ const translations = {
     milliliter: "Milliliter (ml)",
     liter: "Liter (L)",
     milligram: "Milligram (mg)",
+    confirmSelection: "Confirm",
+    confirmLogoutTitle: "Confirm Logout",
+    confirmLogoutMessage: "Are you sure you want to log out?",
+    confirm: "Confirm",
+    matchingRecipes: "Recipes matching your ingredients",
+    noMatchingRecipes: "No recipes match the selected ingredients",
   },
 } as const;
 

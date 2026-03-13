@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { Search } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import BottomNav from "@/components/BottomNav";
 import ExpiringAlert from "@/components/ExpiringAlert";
 import RecipeItem from "@/components/RecipeItem";
@@ -25,9 +25,12 @@ interface ExpiringItem {
 
 const Recipes = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user } = useAuth();
   const { t } = useLanguage();
+  const selectedIngredients: string[] = (location.state as any)?.selectedIngredients || [];
   const [recommended, setRecommended] = useState<Recipe[]>([]);
+  const [matchedRecipes, setMatchedRecipes] = useState<Recipe[]>([]);
   const [history, setHistory] = useState<Recipe[]>([]);
   const [favoriteIds, setFavoriteIds] = useState<Set<string>>(new Set());
   const [expiringItems, setExpiringItems] = useState<ExpiringItem[]>([]);
@@ -87,12 +90,31 @@ const Recipes = () => {
     }
   }, [user]);
 
+  const fetchMatchedRecipes = useCallback(async () => {
+    if (selectedIngredients.length === 0) { setMatchedRecipes([]); return; }
+    const { data } = await supabase.from("recipes").select("*");
+    if (data) {
+      const matched = data.filter((recipe) => {
+        const recipeIngredients = recipe.ingredients as any[];
+        if (!recipeIngredients || !Array.isArray(recipeIngredients)) return false;
+        return selectedIngredients.some((sel) =>
+          recipeIngredients.some((ri: any) => {
+            const name = typeof ri === "string" ? ri : ri.name || "";
+            return name.toLowerCase().includes(sel.toLowerCase());
+          })
+        );
+      });
+      setMatchedRecipes(matched);
+    }
+  }, [selectedIngredients]);
+
   useEffect(() => {
     fetchExpiring();
     fetchRecommended();
     fetchHistory();
     fetchFavorites();
-  }, [fetchExpiring, fetchRecommended, fetchHistory, fetchFavorites]);
+    fetchMatchedRecipes();
+  }, [fetchExpiring, fetchRecommended, fetchHistory, fetchFavorites, fetchMatchedRecipes]);
 
   const handleRecipeClick = async (recipe: Recipe) => {
     if (user) {
@@ -128,6 +150,21 @@ const Recipes = () => {
             <Search className="h-5 w-5 text-foreground" />
           </div>
         </div>
+
+        {selectedIngredients.length > 0 && (
+          <section>
+            <h2 className="font-body text-base font-semibold text-foreground mb-3">{t.matchingRecipes}</h2>
+            {matchedRecipes.length > 0 ? (
+              <div className="space-y-3">
+                {matchedRecipes.map((recipe) => (
+                  <RecipeItem key={recipe.id} image={recipe.image_url || ""} title={recipe.name} category={recipe.category} rating={Number(recipe.rating)} liked={favoriteIds.has(recipe.id)} onLikeToggle={() => toggleFavorite(recipe.id)} onClick={() => handleRecipeClick(recipe)} />
+                ))}
+              </div>
+            ) : (
+              <p className="text-sm text-muted-foreground font-body">{t.noMatchingRecipes}</p>
+            )}
+          </section>
+        )}
 
         <section>
           <h2 className="font-body text-base font-semibold text-foreground mb-3">{t.expiringTitle}</h2>
