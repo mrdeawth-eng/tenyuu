@@ -25,12 +25,13 @@ interface ExpiringItem {
 
 const Recipes = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user } = useAuth();
   const { t } = useLanguage();
+  const selectedIngredients: string[] = (location.state as any)?.selectedIngredients || [];
   const [recommended, setRecommended] = useState<Recipe[]>([]);
+  const [matchedRecipes, setMatchedRecipes] = useState<Recipe[]>([]);
   const [history, setHistory] = useState<Recipe[]>([]);
-  const [favoriteIds, setFavoriteIds] = useState<Set<string>>(new Set());
-  const [expiringItems, setExpiringItems] = useState<ExpiringItem[]>([]);
 
   const fetchExpiring = useCallback(async () => {
     if (!user) return;
