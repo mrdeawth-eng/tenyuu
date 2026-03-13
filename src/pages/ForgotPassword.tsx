@@ -19,12 +19,6 @@ const ForgotPassword = () => {
     }
     setLoading(true);
 
-    // Generate a 4-digit OTP and store it temporarily
-    const otp = Math.floor(1000 + Math.random() * 9000).toString();
-    sessionStorage.setItem("reset_otp", otp);
-    sessionStorage.setItem("reset_email", email);
-
-    // Use Supabase to send password reset email (the OTP is for our custom verification)
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: `${window.location.origin}/reset-password`,
     });
@@ -32,9 +26,7 @@ const ForgotPassword = () => {
     if (error) {
       toast.error(error.message);
     } else {
-      toast.success(`Verification code sent to ${email}`);
-      // Navigate to verify page with OTP stored in session
-      navigate("/verify-otp");
+      toast.success(`Password reset link sent to ${email}`);
     }
     setLoading(false);
   };

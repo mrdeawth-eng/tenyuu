@@ -132,7 +132,7 @@ const Profile = () => {
             <ChevronRight className="w-5 h-5 text-muted-foreground" />
           </button>
 
-          <button onClick={() => signOut()} className="w-full flex items-center justify-between px-5 py-4 hover:bg-accent/50 transition-colors text-destructive">
+          <button onClick={() => setShowLogoutDialog(true)} className="w-full flex items-center justify-between px-5 py-4 hover:bg-accent/50 transition-colors text-destructive">
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-lg bg-destructive/10"><LogOut className="w-5 h-5" /></div>
               <span className="font-medium text-base">{t.logout}</span>
