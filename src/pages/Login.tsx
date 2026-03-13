@@ -40,7 +40,7 @@ const Login = () => {
     <div className="flex min-h-screen items-center justify-center bg-background px-6">
       <div className="w-full max-w-sm space-y-10">
         <h1 className="text-center font-display text-5xl font-bold tracking-widest text-foreground">TENYUU</h1>
-        <p className="text-center text-sm text-muted-foreground -mt-6">{t.discoverRecipes}</p>
+        <p className="hidden">{t.discoverRecipes}</p>
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <IconInput icon={User} type="email" placeholder={t.email} value={email} onChange={(e) => setEmail(e.target.value)} />
