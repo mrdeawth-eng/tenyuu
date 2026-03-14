@@ -22,7 +22,7 @@ interface HistoryItem {
 const Profile = () => {
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
-  const { t } = useLanguage();
+  const { lang, t } = useLanguage();
   const [history, setHistory] = useState<HistoryItem[]>([]);
 
   useEffect(() => {
