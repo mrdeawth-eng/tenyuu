@@ -27,6 +27,7 @@ const Search = () => {
   const [loading, setLoading] = useState(false);
   const [favoriteIds, setFavoriteIds] = useState<Set<string>>(new Set());
   const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [categorySearch, setCategorySearch] = useState("");
 
   const fetchFavorites = useCallback(async () => {
     if (!user) return;
