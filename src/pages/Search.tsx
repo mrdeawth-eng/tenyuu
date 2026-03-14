@@ -110,15 +110,15 @@ const Search = () => {
           <div className="flex items-center gap-2 flex-wrap">
             <span className="text-sm text-muted-foreground font-body">{t.category} :</span>
             <div className="relative flex-1 flex items-center">
-              <input className="flex h-9 w-full rounded-lg border border-border bg-card px-3 text-sm font-body text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" placeholder={t.searchCategory} readOnly />
+              <input className="flex h-9 w-full rounded-lg border border-border bg-card px-3 text-sm font-body text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" placeholder={t.searchCategory} value={categorySearch} onChange={(e) => setCategorySearch(e.target.value)} />
               <SearchIcon className="absolute right-2 h-4 w-4 text-muted-foreground" />
             </div>
           </div>
         )}
 
         <div className="flex gap-2 flex-wrap">
-          {CATEGORIES.map((cat) => (
-            <button key={cat} onClick={() => toggleCategory(cat)} className={`px-4 py-2 rounded-xl text-sm font-medium font-body transition-colors border ${selectedCategories.includes(cat) ? "bg-foreground text-background border-foreground" : "bg-card text-foreground border-border hover:bg-accent"}`}>{cat}</button>
+          {CATEGORIES.filter((cat) => cat.includes(categorySearch.trim())).map((cat) => (
+            <button key={cat} onClick={() => { toggleCategory(cat); setCategorySearch(""); }} className={`px-4 py-2 rounded-xl text-sm font-medium font-body transition-colors border ${selectedCategories.includes(cat) ? "bg-foreground text-background border-foreground" : "bg-card text-foreground border-border hover:bg-accent"}`}>{cat}</button>
           ))}
         </div>
 
