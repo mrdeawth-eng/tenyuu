@@ -48,7 +48,7 @@ const Recipes = () => {
           const daysLeft = differenceInDays(expDate, today);
           return { name: item.name, expiryDate: format(expDate, "dd/MM/yyyy"), daysLeft };
         })
-        .filter((item) => item.daysLeft >= 0 && item.daysLeft <= 7)
+        .filter((item) => item.daysLeft >= 0 && item.daysLeft <= 3)
         .sort((a, b) => a.daysLeft - b.daysLeft);
       setExpiringItems(items);
     }
