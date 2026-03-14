@@ -16,7 +16,6 @@ interface Recipe {
 }
 
 const CATEGORIES = ["ทอด", "ผัด", "ต้ม", "เส้น"];
-const [categorySearch, setCategorySearch] = useState("");
 
 const Search = () => {
   const navigate = useNavigate();
