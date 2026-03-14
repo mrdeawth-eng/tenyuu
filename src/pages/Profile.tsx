@@ -144,8 +144,8 @@ const Profile = () => {
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>
-                <AlertDialogTitle>{t.language === "th" || !t.language ? "ยืนยันการออกจากระบบ" : "Confirm Logout"}</AlertDialogTitle>
-                <AlertDialogDescription>{t.language === "th" || !t.language ? "คุณแน่ใจหรือไม่ว่าต้องการออกจากระบบ?" : "Are you sure you want to log out?"}</AlertDialogDescription>
+                <AlertDialogTitle>{lang === "th" ? "ยืนยันการออกจากระบบ" : "Confirm Logout"}</AlertDialogTitle>
+                <AlertDialogDescription>{lang === "th" ? "คุณแน่ใจหรือไม่ว่าต้องการออกจากระบบ?" : "Are you sure you want to log out?"}</AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel>{t.cancel}</AlertDialogCancel>
