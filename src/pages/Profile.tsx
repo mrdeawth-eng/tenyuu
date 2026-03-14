@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { History, Heart, Settings, FileWarning, LogOut, ChevronRight, Star } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import BottomNav from "@/components/BottomNav";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -21,7 +22,7 @@ interface HistoryItem {
 const Profile = () => {
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
-  const { t } = useLanguage();
+  const { lang, t } = useLanguage();
   const [history, setHistory] = useState<HistoryItem[]>([]);
 
   useEffect(() => {
@@ -132,12 +133,26 @@ const Profile = () => {
             <ChevronRight className="w-5 h-5 text-muted-foreground" />
           </button>
 
-          <button onClick={() => signOut()} className="w-full flex items-center justify-between px-5 py-4 hover:bg-accent/50 transition-colors text-destructive">
-            <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-destructive/10"><LogOut className="w-5 h-5" /></div>
-              <span className="font-medium text-base">{t.logout}</span>
-            </div>
-          </button>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <button className="w-full flex items-center justify-between px-5 py-4 hover:bg-accent/50 transition-colors text-destructive">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-lg bg-destructive/10"><LogOut className="w-5 h-5" /></div>
+                  <span className="font-medium text-base">{t.logout}</span>
+                </div>
+              </button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>{lang === "th" ? "ยืนยันการออกจากระบบ" : "Confirm Logout"}</AlertDialogTitle>
+                <AlertDialogDescription>{lang === "th" ? "คุณแน่ใจหรือไม่ว่าต้องการออกจากระบบ?" : "Are you sure you want to log out?"}</AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>{t.cancel}</AlertDialogCancel>
+                <AlertDialogAction onClick={() => signOut()} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">{t.logout}</AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       </main>
       
