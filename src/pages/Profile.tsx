@@ -133,12 +133,26 @@ const Profile = () => {
             <ChevronRight className="w-5 h-5 text-muted-foreground" />
           </button>
 
-          <button onClick={() => signOut()} className="w-full flex items-center justify-between px-5 py-4 hover:bg-accent/50 transition-colors text-destructive">
-            <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-destructive/10"><LogOut className="w-5 h-5" /></div>
-              <span className="font-medium text-base">{t.logout}</span>
-            </div>
-          </button>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <button className="w-full flex items-center justify-between px-5 py-4 hover:bg-accent/50 transition-colors text-destructive">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-lg bg-destructive/10"><LogOut className="w-5 h-5" /></div>
+                  <span className="font-medium text-base">{t.logout}</span>
+                </div>
+              </button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>{t.language === "th" || !t.language ? "ยืนยันการออกจากระบบ" : "Confirm Logout"}</AlertDialogTitle>
+                <AlertDialogDescription>{t.language === "th" || !t.language ? "คุณแน่ใจหรือไม่ว่าต้องการออกจากระบบ?" : "Are you sure you want to log out?"}</AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>{t.cancel}</AlertDialogCancel>
+                <AlertDialogAction onClick={() => signOut()} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">{t.logout}</AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       </main>
       
