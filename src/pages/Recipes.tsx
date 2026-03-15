@@ -65,17 +65,28 @@ const Recipes = () => {
 
   const fetchRecommended = useCallback(async () => {
     if (!user) return;
-    const { data: saved } = await supabase.from("user_saved_recipes").select("recipe_id").eq("user_id", user.id);
-    const savedIds = saved?.map((s: any) => s.recipe_id) || [];
 
-    if (savedIds.length > 0) {
-      const { data } = await supabase.from("recipes").select("*").in("id", savedIds).order("rating", { ascending: false }).limit(5);
-      setRecommended(data || []);
+    if (selectedIngredients && selectedIngredients.length > 0) {
+      const { data } = await supabase.from("recipes").select("*");
+      if (data) {
+        const filtered = data.filter(recipe =>
+          recipe.ingredients && recipe.ingredients.some((ing: string) => selectedIngredients.includes(ing))
+        ).sort((a, b) => b.rating - a.rating).slice(0, 5);
+        setRecommended(filtered);
+      }
     } else {
-      const { data } = await supabase.from("recipes").select("*").order("rating", { ascending: false }).limit(5);
-      setRecommended(data || []);
+      const { data: saved } = await supabase.from("user_saved_recipes").select("recipe_id").eq("user_id", user.id);
+      const savedIds = saved?.map((s: any) => s.recipe_id) || [];
+
+      if (savedIds.length > 0) {
+        const { data } = await supabase.from("recipes").select("*").in("id", savedIds).order("rating", { ascending: false }).limit(5);
+        setRecommended(data || []);
+      } else {
+        const { data } = await supabase.from("recipes").select("*").order("rating", { ascending: false }).limit(5);
+        setRecommended(data || []);
+      }
     }
-  }, [user]);
+  }, [user, selectedIngredients]);
 
   const fetchHistory = useCallback(async () => {
     if (!user) return;
