@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { Search } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import BottomNav from "@/components/BottomNav";
 import ExpiringAlert from "@/components/ExpiringAlert";
 import RecipeItem from "@/components/RecipeItem";
@@ -15,6 +15,7 @@ interface Recipe {
   category: string;
   image_url: string | null;
   rating: number;
+  ingredients?: string[];
 }
 
 interface ExpiringItem {
@@ -25,12 +26,15 @@ interface ExpiringItem {
 
 const Recipes = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user } = useAuth();
   const { t } = useLanguage();
   const [recommended, setRecommended] = useState<Recipe[]>([]);
   const [history, setHistory] = useState<Recipe[]>([]);
   const [favoriteIds, setFavoriteIds] = useState<Set<string>>(new Set());
   const [expiringItems, setExpiringItems] = useState<ExpiringItem[]>([]);
+
+  const selectedIngredients = location.state?.ingredients as string[] | undefined;
 
   const fetchExpiring = useCallback(async () => {
     if (!user) return;
@@ -62,17 +66,29 @@ const Recipes = () => {
 
   const fetchRecommended = useCallback(async () => {
     if (!user) return;
-    const { data: saved } = await supabase.from("user_saved_recipes").select("recipe_id").eq("user_id", user.id);
-    const savedIds = saved?.map((s: any) => s.recipe_id) || [];
 
-    if (savedIds.length > 0) {
-      const { data } = await supabase.from("recipes").select("*").in("id", savedIds).order("rating", { ascending: false }).limit(5);
-      setRecommended(data || []);
+    if (selectedIngredients && selectedIngredients.length > 0) {
+      const { data } = await supabase.from("recipes").select("*");
+      if (data) {
+        const filtered = data.filter((recipe) =>
+          Array.isArray(recipe.ingredients) &&
+          recipe.ingredients.some((ing) => selectedIngredients.includes(ing))
+        ).sort((a, b) => b.rating - a.rating).slice(0, 5);
+        setRecommended(filtered);
+      }
     } else {
-      const { data } = await supabase.from("recipes").select("*").order("rating", { ascending: false }).limit(5);
-      setRecommended(data || []);
+      const { data: saved } = await supabase.from("user_saved_recipes").select("recipe_id").eq("user_id", user.id);
+      const savedIds = saved?.map((s: any) => s.recipe_id) || [];
+
+      if (savedIds.length > 0) {
+        const { data } = await supabase.from("recipes").select("*").in("id", savedIds).order("rating", { ascending: false }).limit(5);
+        setRecommended(data || []);
+      } else {
+        const { data } = await supabase.from("recipes").select("*").order("rating", { ascending: false }).limit(5);
+        setRecommended(data || []);
+      }
     }
-  }, [user]);
+  }, [user, selectedIngredients]);
 
   const fetchHistory = useCallback(async () => {
     if (!user) return;

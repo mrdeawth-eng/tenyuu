@@ -79,6 +79,7 @@ const Fridge = () => {
       fetchIngredients();
     }
   };
+
   const searchRecipes = async () => {
     const selectedIngredients = ingredients
       .filter((item) => selected.has(item.id))
@@ -106,6 +107,7 @@ const Fridge = () => {
 
     setRecipes(results as Recipe[]);
   };
+
 
   const formatQuantity = (qty: number, unit: string) => {
     if (unit === "piece") return `x ${qty}`;
