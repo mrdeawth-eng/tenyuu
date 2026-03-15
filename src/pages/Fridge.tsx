@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 import { useLanguage } from "@/contexts/LanguageContext";
+import RecipeItem from "@/components/RecipeItem";
 
 interface Ingredient {
   id: string;
@@ -17,6 +18,15 @@ interface Ingredient {
   notes: string | null;
 }
 
+interface Recipe {
+  id: string;
+  name: string;
+  category: string;
+  image_url: string | null;
+  rating: number;
+  ingredients: string[];
+}
+
 const Fridge = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -25,6 +35,7 @@ const Fridge = () => {
   const [loading, setLoading] = useState(true);
   const [selecting, setSelecting] = useState(false);
   const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [recipes, setRecipes] = useState<Recipe[]>([]);
 
   const fetchIngredients = async () => {
     if (!user) return;
@@ -67,6 +78,33 @@ const Fridge = () => {
       setSelecting(false);
       fetchIngredients();
     }
+  };
+  const searchRecipes = async () => {
+    const selectedIngredients = ingredients
+      .filter((item) => selected.has(item.id))
+      .map((item) => item.name);
+
+    if (selectedIngredients.length === 0) {
+      toast.error("Please select ingredients first");
+      return;
+    }
+
+    const { data, error } = await supabase
+      .from("recipes")
+      .select("*");
+
+    if (error) {
+      toast.error("Failed to search recipes");
+      return;
+    }
+
+    const results = (data || [] as Recipe[]).filter((recipe) =>
+      (recipe.ingredients as string[]).some((ing) =>
+        selectedIngredients.includes(ing)
+      )
+    );
+
+    setRecipes(results as Recipe[]);
   };
 
   const formatQuantity = (qty: number, unit: string) => {
@@ -134,6 +172,15 @@ const Fridge = () => {
         <div className="space-y-3 pt-4">
           {selecting ? (
             <>
+            <Button
+  variant="default"
+  size="lg"
+  className="w-full h-14 rounded-xl"
+  onClick={searchRecipes}
+  disabled={selected.size === 0}
+>
+  🔎 Search Menu
+</Button>
               <Button
                 variant="destructive"
                 size="lg"
@@ -179,6 +226,22 @@ const Fridge = () => {
             </>
           )}
         </div>
+
+        {/* Recipe Results */}
+        {recipes.length > 0 && (
+          <div className="space-y-3 pt-4">
+            {recipes.map((recipe) => (
+              <RecipeItem
+                key={recipe.id}
+                image={recipe.image_url || "/placeholder.jpg"}
+                title={recipe.name}
+                category={recipe.category}
+                rating={recipe.rating}
+                onClick={() => navigate(`/recipe/${recipe.id}`)}
+              />
+            ))}
+          </div>
+        )}
       </main>
 
       <BottomNav />
