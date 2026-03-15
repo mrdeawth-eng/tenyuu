@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { Search } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import BottomNav from "@/components/BottomNav";
 import ExpiringAlert from "@/components/ExpiringAlert";
 import RecipeItem from "@/components/RecipeItem";
@@ -25,12 +25,15 @@ interface ExpiringItem {
 
 const Recipes = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user } = useAuth();
   const { t } = useLanguage();
   const [recommended, setRecommended] = useState<Recipe[]>([]);
   const [history, setHistory] = useState<Recipe[]>([]);
   const [favoriteIds, setFavoriteIds] = useState<Set<string>>(new Set());
   const [expiringItems, setExpiringItems] = useState<ExpiringItem[]>([]);
+
+  const selectedIngredients = location.state?.ingredients as string[] | undefined;
 
   const fetchExpiring = useCallback(async () => {
     if (!user) return;

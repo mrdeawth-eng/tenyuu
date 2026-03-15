@@ -68,6 +68,15 @@ const Fridge = () => {
       fetchIngredients();
     }
   };
+  const confirmIngredients = () => {
+  const selectedIngredients = ingredients
+    .filter((item) => selected.has(item.id))
+    .map((item) => item.name);
+
+  navigate("/recipes", {
+    state: { ingredients: selectedIngredients }
+  });
+};
 
   const formatQuantity = (qty: number, unit: string) => {
     if (unit === "piece") return `x ${qty}`;
@@ -143,6 +152,15 @@ const Fridge = () => {
               >
                 <Trash2 className="h-5 w-5 mr-2" />
                 {t.deleteSelected} ({selected.size})
+              </Button>
+              <Button
+                variant="default"
+                size="lg"
+                className="w-full h-14 rounded-xl"
+                onClick={confirmIngredients}
+                disabled={selected.size === 0}
+              >
+                Confirm
               </Button>
               <Button
                 variant="outline"
