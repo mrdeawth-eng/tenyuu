@@ -15,6 +15,7 @@ interface Recipe {
   category: string;
   image_url: string | null;
   rating: number;
+  ingredients?: string[];
 }
 
 interface ExpiringItem {
@@ -69,8 +70,9 @@ const Recipes = () => {
     if (selectedIngredients && selectedIngredients.length > 0) {
       const { data } = await supabase.from("recipes").select("*");
       if (data) {
-        const filtered = data.filter(recipe =>
-          recipe.ingredients && recipe.ingredients.some((ing: string) => selectedIngredients.includes(ing))
+        const filtered = data.filter((recipe) =>
+          Array.isArray(recipe.ingredients) &&
+          recipe.ingredients.some((ing) => selectedIngredients.includes(ing))
         ).sort((a, b) => b.rating - a.rating).slice(0, 5);
         setRecommended(filtered);
       }
